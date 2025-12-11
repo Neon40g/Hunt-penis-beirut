@@ -18,11 +18,11 @@ export interface UserStats {
 // In-memory fallback storage
 class InMemoryStore {
   private users: Map<string, UserStats> = new Map();
-  
+
   async getUser(id: string): Promise<UserStats | null> {
     return this.users.get(id) || null;
   }
-  
+
   async createUser(name: string): Promise<UserStats> {
     const id = `user_${Date.now()}_${Math.random().toString(36).slice(2)}`;
     const user: UserStats = {
@@ -36,7 +36,7 @@ class InMemoryStore {
     this.users.set(id, user);
     return user;
   }
-  
+
   async updateStats(id: string, kills: number, deaths: number): Promise<void> {
     const user = this.users.get(id);
     if (user) {
@@ -45,7 +45,7 @@ class InMemoryStore {
       user.gamesPlayed += 1;
     }
   }
-  
+
   async getLeaderboard(limit: number = 10): Promise<UserStats[]> {
     return Array.from(this.users.values())
       .sort((a, b) => b.kills - a.kills)
@@ -56,7 +56,7 @@ class InMemoryStore {
 // PostgreSQL store
 class PostgresStore {
   private sql: postgres.Sql;
-  
+
   constructor(connectionString: string) {
     this.sql = postgres(connectionString, {
       max: 5,
@@ -64,7 +64,7 @@ class PostgresStore {
       connect_timeout: 10
     });
   }
-  
+
   async initialize(): Promise<void> {
     await this.sql`
       CREATE TABLE IF NOT EXISTS users (
@@ -77,7 +77,7 @@ class PostgresStore {
       )
     `;
   }
-  
+
   async getUser(id: string): Promise<UserStats | null> {
     const rows = await this.sql`
       SELECT id, name, kills, deaths, games_played as "gamesPlayed", created_at as "createdAt"
@@ -85,7 +85,7 @@ class PostgresStore {
     `;
     return rows[0] as UserStats || null;
   }
-  
+
   async createUser(name: string): Promise<UserStats> {
     const id = `user_${Date.now()}_${Math.random().toString(36).slice(2)}`;
     const rows = await this.sql`
@@ -95,7 +95,7 @@ class PostgresStore {
     `;
     return rows[0] as UserStats;
   }
-  
+
   async updateStats(id: string, kills: number, deaths: number): Promise<void> {
     await this.sql`
       UPDATE users SET
@@ -105,15 +105,15 @@ class PostgresStore {
       WHERE id = ${id}
     `;
   }
-  
+
   async getLeaderboard(limit: number = 10): Promise<UserStats[]> {
     const rows = await this.sql`
       SELECT id, name, kills, deaths, games_played as "gamesPlayed", created_at as "createdAt"
       FROM users ORDER BY kills DESC LIMIT ${limit}
     `;
-    return rows as UserStats[];
+    return rows as unknown as UserStats[];
   }
-  
+
   async close(): Promise<void> {
     await this.sql.end();
   }
