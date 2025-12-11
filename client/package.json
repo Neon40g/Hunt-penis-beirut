@@ -1,0 +1,18 @@
+{
+  "name": "@shooter/client",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@babylonjs/core": "^7.0.0",
+    "@shooter/shared": "*"
+  },
+  "devDependencies": {
+    "vite": "^5.0.10",
+    "typescript": "^5.3.3"
+  }
+}
