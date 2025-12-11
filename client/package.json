@@ -9,7 +9,7 @@
   },
   "dependencies": {
     "@babylonjs/core": "^7.0.0",
-    "@shooter/shared": "*"
+    "@shooter/shared": "file:../shared"
   },
   "devDependencies": {
     "vite": "^5.0.10",

@@ -11,12 +11,7 @@
     "esModuleInterop": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
-    "resolveJsonModule": true,
-    "paths": {
-      "@shooter/shared": [
-        "../shared/dist/index.d.ts"
-      ]
-    }
+    "resolveJsonModule": true
   },
   "include": [
     "src/**/*"

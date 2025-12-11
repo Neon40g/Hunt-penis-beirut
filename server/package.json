@@ -9,7 +9,7 @@
     "start": "node dist/index.js"
   },
   "dependencies": {
-    "@shooter/shared": "*",
+    "@shooter/shared": "file:../shared",
     "uWebSockets.js": "github:uNetworking/uWebSockets.js#v20.44.0",
     "postgres": "^3.4.3"
   },
